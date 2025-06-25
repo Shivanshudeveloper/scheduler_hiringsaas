@@ -5,7 +5,7 @@ require('../models/Subscription');
 require('../models/User');
 require('../models/TransactionHistory');
 require('../models/Jobs');
-
+require('../models/jobAdvertLimits')
 async function triggerRenewal(email) {
   try {
     await axios.post(
@@ -32,9 +32,9 @@ async function processCancellation(subscription) {
   try {
     const Subscription = mongoose.model('Subscription');
     const User = mongoose.model('User');
-    
+    const JobAdvertLimit = mongoose.model('JobAdvertLimits')
     const now = new Date();
-    const freePlan = subscription.userType === 'jobseeker' ? 'marhaban' : 'intro';
+    const freePlan =  'marhaban';
     
     console.log(`🔄 Processing cancellation for ${subscription.userEmail}, downgrading to ${freePlan}`);
     
@@ -54,7 +54,14 @@ async function processCancellation(subscription) {
       },
       { new: true }
     );
-    
+    const jobAdvertLimitUpdate = await JobAdvertLimit.findOneAndUpdate({userEmail: subscription.userEmail}, {
+      userPlan: 'marhaban'
+    })
+
+    if (!jobAdvertLimitUpdate) {
+      console.warn(`⚠️  No JobAdvertLimit entry found for ${subscription.userEmail}`);
+    }
+
     if (!userUpdateResult) {
       console.error(`⚠️  User not found for email: ${subscription.userEmail}`);
     } else {

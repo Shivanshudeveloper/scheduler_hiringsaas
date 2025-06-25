@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./services/database');
 const { startCronJob } = require('./services/subscriptionCron');
+const { startJobAlertCron } = require('./services/delayedJobAlertNotification');
+const { startJobLimitCron } = require('./services/jobAdvertLimitCron');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +20,8 @@ app.get('/health', (req, res) => {
 async function startServer() {
   await connectDB();
   startCronJob();
+  startJobAlertCron();
+  startJobLimitCron();
   
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

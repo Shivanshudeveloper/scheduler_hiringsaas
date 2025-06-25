@@ -1,22 +1,12 @@
 const cron = require('node-cron');
-const mongoose = require('mongoose');
-const JobAlertNotification = require('../models/jobAlertNotification'); // adjust path
-const { sendJobAlertEmail } = require('../lib/notification-email/job-alert-notification.js'); // adjust path
+const JobAlertNotification = require('../models/jobAlertNotification');
+const { sendJobAlertEmail } = require('../lib/notification-email/job-alert-notification.js');
 
-// Connect to MongoDB (only if this is a separate script)
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// Run every 5 minutes
-cron.schedule('*/5 * * * *', async () => {
-  console.log('⏰ Running job alert cron job...');
+async function processJobAlerts() {
+  console.log('⏰ Processing job alerts...');
 
   try {
     const now = new Date();
-
-    // Get pending notifications scheduled for now or earlier
     const pendingAlerts = await JobAlertNotification.find({
       scheduledFor: { $lte: now },
       status: 'pending',
@@ -38,7 +28,6 @@ cron.schedule('*/5 * * * *', async () => {
         },
       } = alert;
 
-      // Send the job alert
       const result = await sendJobAlertEmail(
         userEmails,
         jobTitle,
@@ -50,19 +39,34 @@ cron.schedule('*/5 * * * *', async () => {
         workArrangement
       );
 
-      // Update alert status based on result
       if (result.success) {
         alert.status = 'sent';
         alert.sentAt = new Date();
         await alert.save();
-        console.log(`Alert for jobId ${jobId} sent successfully.`);
+        console.log(`✅ Alert for jobId ${jobId} sent successfully.`);
       } else {
         alert.status = 'failed';
         await alert.save();
         console.error(`❌ Failed to send alert for jobId ${jobId}.`);
       }
     }
+
+    return { success: true, processed: pendingAlerts.length };
   } catch (err) {
-    console.error('❌ Cron job error:', err);
+    console.error('❌ Job alert processing error:', err);
+    return { success: false, error: err.message };
   }
-});
+}
+
+function startJobAlertCron() {
+  cron.schedule('*/5 * * * *', async () => {
+    await processJobAlerts();
+  });
+
+  console.log('📧 Job alert cron scheduled (every 5 minutes)');
+}
+
+module.exports = {
+  startJobAlertCron,
+  processJobAlerts
+};
