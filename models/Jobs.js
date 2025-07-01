@@ -62,14 +62,13 @@ const jobSchema = new mongoose.Schema(
     boostExpiry: {
       type: Date,
     },
-    jobPostExpiry: {
-      type: Date
-    },
     applications: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "JobApplication"
+    }],
+    jobPostExpiry: {
+      type: Date
     },
-  ],
   },
   
   { timestamps: true }

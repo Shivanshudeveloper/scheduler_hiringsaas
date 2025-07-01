@@ -4,6 +4,7 @@ const connectDB = require('./services/database');
 const { startCronJob } = require('./services/subscriptionCron');
 const { startJobAlertCron } = require('./services/delayedJobAlertNotification');
 const { startJobLimitCron } = require('./services/jobAdvertLimitCron');
+const { startJobExpiryCron } = require('./services/jobExpiryCron'); // Add this line
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,7 @@ async function startServer() {
   startCronJob();
   startJobAlertCron();
   startJobLimitCron();
+  startJobExpiryCron(); // Add this line
   
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
