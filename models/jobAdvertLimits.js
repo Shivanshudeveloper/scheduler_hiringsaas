@@ -26,4 +26,4 @@ const jobAdvertLimitSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('JobAdvertLimitSchema', jobAdvertLimitSchema);
+module.exports = mongoose.model('JobAdvertLimits', jobAdvertLimitSchema);

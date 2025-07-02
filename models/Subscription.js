@@ -41,7 +41,7 @@ const subscriptionSchema = new mongoose.Schema({
     enum: ['pending', 'completed', 'failed'], 
     default: 'pending' 
   },
-  paymentMethod: { // From webhook: 'Visa', 'Mastercard', etc.
+  paymentMethod: {
     type: String
   },
   nextBillingDate: {
@@ -51,12 +51,30 @@ const subscriptionSchema = new mongoose.Schema({
     type: Boolean, 
     default: true 
   },
+  
+  // GRACEFUL CANCELLATION FIELDS
+  cancelledAt: {
+    type: Date,
+    default: null
+  },
+  cancelAtPeriodEnd: {
+    type: Boolean,
+    default: false
+  },
+  periodEndDate: {
+    type: Date
+  },
+  
   createdAt: { 
     type: Date, 
     default: Date.now 
   },
   lastChargedDate:{
     type: Date
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
@@ -64,6 +82,8 @@ const subscriptionSchema = new mongoose.Schema({
 subscriptionSchema.index({ userEmail: 1 });
 subscriptionSchema.index({ orderId: 1 });
 subscriptionSchema.index({ userEmail: 1, orderId: 1 }, { unique: true });
+subscriptionSchema.index({ isActive: 1, cancelAtPeriodEnd: 1 });
+subscriptionSchema.index({ periodEndDate: 1 });
 
 // Update the updatedAt field before saving
 subscriptionSchema.pre('save', function(next) {
