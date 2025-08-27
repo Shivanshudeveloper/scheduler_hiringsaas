@@ -121,14 +121,13 @@ const transactionHistorySchema = new mongoose.Schema({
 });
 
 // Indexes for better query performance
-transactionHistorySchema.index({ userEmail: 1, createdAt: -1 });
-transactionHistorySchema.index({ subscriptionId: 1 });
-transactionHistorySchema.index({ transactionId: 1 });
-transactionHistorySchema.index({ orderId: 1 });
-transactionHistorySchema.index({ transactionType: 1 });
-transactionHistorySchema.index({ gatewayTransactionId: 1 });
-transactionHistorySchema.index({ jobId: 1 }); // Index for job boost transactions
-transactionHistorySchema.index({ boostStartDate: 1, boostEndDate: 1 }); // Index for boost periods
+// transactionHistorySchema.index({ createdAt: -1 });
+// transactionHistorySchema.index({ subscriptionId: 1 });
+// transactionHistorySchema.index({ transactionId: 1 });
+// transactionHistorySchema.index({ transactionType: 1 });
+// transactionHistorySchema.index({ gatewayTransactionId: 1 });
+// transactionHistorySchema.index({ jobId: 1 }); // Index for job boost transactions
+// transactionHistorySchema.index({ boostStartDate: 1, boostEndDate: 1 }); // Index for boost periods
 
 // Helper method to create transaction record
 transactionHistorySchema.statics.createTransaction = async function(transactionData) {

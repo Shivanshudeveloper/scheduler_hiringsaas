@@ -92,11 +92,11 @@ const subscriptionReminderSchema = new mongoose.Schema({
 });
 
 // Indexes for better query performance
-subscriptionReminderSchema.index({ userEmail: 1, nextBillingDate: 1 });
-subscriptionReminderSchema.index({ subscriptionId: 1 });
-subscriptionReminderSchema.index({ status: 1 });
-subscriptionReminderSchema.index({ reminderSentDate: 1 });
-subscriptionReminderSchema.index({ createdAt: 1 });
+// subscriptionReminderSchema.index({ userEmail: 1, nextBillingDate: 1 });
+// subscriptionReminderSchema.index({ subscriptionId: 1 });
+// subscriptionReminderSchema.index({ status: 1 });
+// subscriptionReminderSchema.index({ reminderSentDate: 1 });
+// subscriptionReminderSchema.index({ createdAt: 1 });
 
 // Compound index to prevent duplicate reminders for same billing cycle
 subscriptionReminderSchema.index({ 

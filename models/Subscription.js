@@ -79,11 +79,11 @@ const subscriptionSchema = new mongoose.Schema({
 });
 
 // Indexes for faster lookups and duplicate prevention
-subscriptionSchema.index({ userEmail: 1 });
-subscriptionSchema.index({ orderId: 1 });
-subscriptionSchema.index({ userEmail: 1, orderId: 1 }, { unique: true });
-subscriptionSchema.index({ isActive: 1, cancelAtPeriodEnd: 1 });
-subscriptionSchema.index({ periodEndDate: 1 });
+// subscriptionSchema.index({ userEmail: 1 });
+// subscriptionSchema.index({ orderId: 1 });
+// subscriptionSchema.index({ userEmail: 1, orderId: 1 }, { unique: true });
+// subscriptionSchema.index({ isActive: 1, cancelAtPeriodEnd: 1 });
+// subscriptionSchema.index({ periodEndDate: 1 });
 
 // Update the updatedAt field before saving
 subscriptionSchema.pre('save', function(next) {
