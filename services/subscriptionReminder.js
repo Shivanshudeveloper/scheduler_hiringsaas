@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const mongoose = require('mongoose');
 require('../models/Subscription');
 require('../models/User');
-require('../models/SubscriptionReminder'); // New model we'll need to create
+require('../models/subscriptionReminder'); // New model we'll need to create
 
 // Email service using Resend (same service used for job alerts)
 const { sendSubscriptionReminderEmail, verifyEmailConfig } = require('../lib/notification-email/subscription-reminder.js');
